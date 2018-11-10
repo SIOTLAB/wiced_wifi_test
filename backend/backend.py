@@ -1,7 +1,6 @@
 import os
 import sys
 import threading
-    #usage: t = threading.Thread(target=get_url, args = (q,u))
 import siot_uart as su
 from flask import Flask,redirect,jsonify,render_template, request
 from jinja2 import Environment, FileSystemLoader
@@ -87,14 +86,6 @@ def uart_echo():
         #TODO: Check syntax on string concat
         res = render_template('index.html',response="Incorrect number of experiments entered. Count: " + str(uart_obj.get_exp_count()) + "/" + str(uart_obj.get_exp_total()))
     else:
-        #TODO: Implement waiting for exp to complete
-        #if uart_obj.running(), render "please wait"
-        #if not running, run start in new thread, and render "please wait"
-        #Shouldn't run new thread if mutex is locked, don't need to worry about multiple
-        #Could use semaphore to make sure that only one thread is running
-
-        #TODO: Run uart_start() in new thread, and return index.html with "Experiments currently running, refresh page to check progress"
-        # response = uart_obj.uart_start(configs, 1)
         t = threading.Thread(target=uart_obj.uart_start, args = (configs,1))
         t.start()
 

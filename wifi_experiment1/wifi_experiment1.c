@@ -37,14 +37,9 @@ static wiced_thread_t packetSendThread;      // Thread that sends packets
 wiced_tcp_socket_t tcp_socket;               // The TCP socket
 wiced_udp_socket_t udp_socket;               // The UDP socket
 
-// static configuration
-//int static_ip_address[4]    = {192, 168, 3, 20};
-//int static_ap_address[4] = {192, 168, 3, 1};
-//int static_netmask[4] = {255, 255, 255, 0};
-
 // dhcp ip configuration
-int broadcast_address[4]    = {192, 168, 3, 255};   // broadcast address
-int server_address[4] = {192, 168, 1, 255};   // raspberry pi address
+int broadcast_address[4]    = {192, 168, 3, 255};
+int server_address[4] = {192, 168, 1, 255};
 char ssid_str[128];
 char pass_str[128];
 uint32_t buf_size = 4096; //Check message
@@ -101,41 +96,6 @@ struct exp_params {
     uint8_t li;                                     //listen interval--0 is default
     //uint16_t scan_interval;                       //wifi scan interval
 };
-
-//const char *jsonString[2] = {
-//     "{"
-//                "\"burst_num\": 1,"
-//                "\"packet_num\": 2,"
-//                "\"transport_protocol\": \"udp\","
-//                "\"tos\": \"Background\","
-//                "\"ack\": \"false\","
-//                "\"delay_burst\": 3,"
-//                "\"delay_exp\": 4,"
-//                "\"size_msg\": 5,"
-//                "\"psm\": \"false\""
-//      "}",
-//      "{"
-//                  "\"burst_num\": 2,"
-//                  "\"packet_num\": 3,"
-//                  "\"transport_protocol\": \"tcp\","
-//                  "\"tos\": \"Voice\","
-//                  "\"ack\": \"true\","
-//                  "\"delay_burst\": 4,"
-//                  "\"delay_exp\": 5,"
-//                  "\"size_msg\": 6,"
-//                  "\"psm\": \"true\""
-//       "}"
-//};
-//
-//const char *jsonStringInit =
-//"{"
-//        "\"ip\": \"192.168.1.190\","
-//        "\"subnet_mask\": \"255.255.255.255\","
-//        "\"gateway\": \"192.168.1.1\","
-//        "\"ssid\": \"CIA_AP\","
-//        "\"pass\": \"glen_rox\","
-//        "\"num_exp\": 5"
-//"}";
 
 struct exp_params test[MAX_EXP_NUM];
 struct init_params login_struct;
@@ -543,7 +503,7 @@ void set_junk_message(char *msg, int length)
     msg[length] = '#';
 }
 
-/*Todo: Make sure that broadcast_address is not hardcoded, or reset it yourself for future */
+/*Todo: All other ip address setting */
 //Function sets ip address according to type
 void set_server_ip_address(uint8_t type, const char* target_ip)
 {
@@ -639,32 +599,25 @@ void set_login_info(platform_dct_wifi_config_t * wifi_config_dct_local)
     }
 
     wiced_scan_result_t * ap_results = malloc(sizeof(wiced_scan_result_t));
-//    snprintf(&ssid_str[0], 15, "SIOTLAB-224-2G");
 
     wiced_wifi_find_ap(login_struct.ssid, ap_results, NULL);
-//    WPRINT_APP_INFO( ("found SSID: %s\n", ap_results->SSID.value) );
 
     strncpy((char*)(wifi_config_dct_local)->stored_ap_list[0].details.SSID.value, ap_results->SSID.value, strlen(ap_results->SSID.value));
     wifi_config_dct_local->stored_ap_list[0].details.SSID.length = strlen(ap_results->SSID.value);
-//    WPRINT_APP_INFO( ("Newly Set SSID: %s\n", wifi_config_dct_local->stored_ap_list[0].details.SSID.value) );
 
     free(ap_results);
 
-//            /* Set passcode */
-//    sprintf(pass_str, "research-lab-ap-cr");
+            /* Set passcode */
     memcpy((char*)(wifi_config_dct_local)->stored_ap_list[0].security_key, login_struct.pass, strlen(login_struct.pass));
     wifi_config_dct_local->stored_ap_list[0].security_key_length = strlen(login_struct.pass);
-//    WPRINT_APP_INFO( ("Newly Set Passcode: %s\n", wifi_config_dct_local->stored_ap_list[0].security_key) );
 
-//    return wifi_config_dct_local;
 }
 
 /* Assumes that json_str has already been parsed into login_struct */
 void ip_config_setup(wiced_ip_setting_t * ip_config)
 {
-    //! Make sure these aren't pass by refrence
+    //TODO: Ensure pass by reference safety here
     /* Set Server IP */
-//    const char * temp_ip = "192.168.69.69";
 //    WPRINT_APP_INFO( ("Read temp_ip as %s\n", login_struct.ip) );
     str_to_ip( login_struct.ip, &serverAddress );
 //    WPRINT_APP_INFO( ("Set Server Address!\n") );
@@ -675,7 +628,6 @@ void ip_config_setup(wiced_ip_setting_t * ip_config)
 //    WPRINT_APP_INFO( ("Set Server IP!\n") );
 
     /* Set netmask */
-//    const char * temp_netmask = "255.255.255.255";
 //    WPRINT_APP_INFO( ("Read temp_ip as %s\n", login_struct.subnet_mask) );
     str_to_ip(login_struct.subnet_mask, &(*ip_config).netmask);
 //    WPRINT_APP_INFO( ("Set netmask!\n") );
@@ -774,7 +726,7 @@ void start_state_machine()
             *p = 'a'; //Dereference will throw null pointer exception which should restart board
         }
     }
-//    free(buf);
+//    free(buf); //TODO: Check if this is necessary
 }
 
 

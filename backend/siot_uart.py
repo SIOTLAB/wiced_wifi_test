@@ -1,4 +1,3 @@
-#http://pyserial.readthedocs.io/en/latest/shortintro.html
 import serial
 from threading import Thread, Lock
 

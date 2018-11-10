@@ -1,0 +1,134 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <!-- The above 3 meta tags *must* come first in the head; any other head content must come *after* these tags -->
+    <meta name="description" content="">
+    <meta name="author" content="">
+
+    <title>SIOTLAB Experiment Configuration</title>
+
+    <!-- Bootstrap core CSS -->
+    <!--<link href="../../bootstrap-3.3.7/dist/css/bootstrap.min.css" rel="stylesheet"> -->
+    <link rel="stylesheet" href = "https://maxcdn.bootstrapcdn.com/bootstrap/3.3.1/css/bootstrap.min.css" />
+
+    <!-- IE10 viewport hack for Surface/desktop Windows 8 bug -->
+    <link href="../../bootstrap-3.3.7/assets/css/ie10-viewport-bug-workaround.css" rel="stylesheet">
+
+    <!-- Custom styles for this template -->
+    <link href="main.css" rel="stylesheet">
+
+    <!-- Just for debugging purposes. Don't actually copy these 2 lines! -->
+    <!--[if lt IE 9]><script src="../../assets/js/ie8-responsive-file-warning.js"></script><![endif]-->
+    <script src="../../bootstrap-3.3.7/assets/js/ie-emulation-modes-warning.js"></script>
+    <script src="../../bootstrap-3.3.7/assets/js/siot.js"></script>
+
+    <!-- HTML5 shim and Respond.js for IE8 support of HTML5 elements and media queries -->
+    <!--[if lt IE 9]>
+      <script src="https://oss.maxcdn.com/html5shiv/3.7.3/html5shiv.min.js"></script>
+      <script src="https://oss.maxcdn.com/respond/1.4.2/respond.min.js"></script>
+    <![endif]-->
+  </head>
+
+  <body>
+<div class = "page-header">
+  <img src = /static/images/SIOTLABlogo.jpg class="center" />
+  <h2 style = "text-align:center">Cypress Experiment Configuration</h2>
+</div>
+    <div class="container">
+      <form action="http://127.0.0.1:5000/uart/append_config" method="post">
+        <div class = "form-group">
+        <label for="target_ip">Target IP</label>
+        <input type="text" name="target_ip" class="form-control">
+        
+        <label for="burst_num">Number of Bursts</label>
+        <input type="text" name="burst_num" class="form-control">
+
+        <label for="packet_num">Number of packets per burst</label>
+        <input type="text" name="packet_num" class="form-control">
+
+        <label for="input3">Type of Transport Protocol</label>
+        <div class="form-check form-check-inline">
+          <input class="form-check-input" type="radio" name="transport_protocol" name = "inlineRadioOptions" value="tcp">
+          <label class="form-check-label" for="transport_protocol">TCP</label>
+        </div>
+        <div class="form-check form-check-inline">
+          <input class="form-check-input" type="radio" name="transport_protocol" name = "inlineRadioOptions" value="udp">
+          <label class="form-check-label" for="inlineRadio2">UDP</label>
+        </div>
+
+        <label for="tos">Type of Service</label>
+        <select class = "form-control" name="tos">
+            <option selected> </option>>
+            <option> Best Effort </option>
+            <option> Background </option>
+            <option> Video </option>
+            <option> Voice </option>
+        </select>
+
+
+        <label for="psm">Acknowledgements</label>
+        <div class="form-check form-check-inline">
+          <input class="form-check-input" type="radio" name="ack" name = "ackOptions" value="true">
+          <label class="form-check-label" for="ackOptions">Enabled</label>
+        </div>
+        <div class="form-check form-check-inline">
+          <input class="form-check-input" type="radio" name="ack" name = "ackOptions" value="false">
+          <label class="form-check-label" for="ackOptions">Disabled</label>
+        </div>
+
+
+        <label for="delay_burst">Duration of Burst Delay</label>
+        <input type="text" name="delay_burst" class="form-control">
+
+        <label for="delay_exp">Duration of Experiment Delay</label>
+        <input type="text" name="delay_exp" class="form-control">
+
+
+        <label for="size_msg">Size of Junk Message</label>
+        <input type="text" name="size_msg" class="form-control">
+
+        <label for="psm">Power Save Mode</label>
+        <div class="form-check form-check-inline">
+          <input class="form-check-input" type="radio" name="psm" name = "r1" value="true">
+          <label class="form-check-label" for="r1">Enabled</label>
+        </div>
+        <div class="form-check form-check-inline">
+          <input class="form-check-input" type="radio" name="psm" name = "r2" value="false">
+          <label class="form-check-label" for="r2">Disabled</label>
+        </div>
+
+        <h2 class="form-signin-heading">Board Response: </h2>
+        {{response}}
+        <br>
+        <input class="btn btn-lg btn-primary btn-block" type="submit" value="Add New Experiment Configuration">
+        <!-- <button class="btn btn-lg btn-primary btn-block" type="submit" formmethod="post">Begin</button> -->
+      </form>
+
+      </div>
+
+      <form action="http://127.0.0.1:5000/uart/board_state" method="post">
+          <input class="btn btn-lg btn-primary btn-block" type="submit" value="Check Board State">
+      </form>
+      <form action="http://127.0.0.1:5000/uart/start" method="post">
+          <input class="btn btn-lg btn-primary btn-block" type="submit" value="Submit All Configurations and Start Experiments">
+      </form>
+      <form action="http://127.0.0.1:5000/uart/clear_exp" method="post">
+          <input class="btn btn-lg btn-primary btn-block" type="submit" value="Clear Exp Configs">
+      </form>
+      <br>
+      <br>
+      <form action="http://127.0.0.1:5000/uart/restart_board" method="post">
+          <input class="btn btn-lg btn-primary btn-block" type="submit" value="Restart Board">
+      </form>
+      <br>
+    </div> <!-- /container -->
+
+
+
+    <!-- IE10 viewport hack for Surface/desktop Windows 8 bug -->
+    <script src="../../bootstrap-3.3.7/assets/js/ie10-viewport-bug-workaround.js"></script>
+  </body>
+</html>
